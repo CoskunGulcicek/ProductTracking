@@ -13,14 +13,22 @@ namespace Tracking.DataAccess.Concrete.EntityFrameworkCore.Context
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=ProductTrackingDb;Trusted_Connection=True;MultipleActiveResultSets=true");//work
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=ProductTrackingDb;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Basket>().HasOne(x => x.Customer).WithOne(x => x.Basket).HasForeignKey<Basket>(x=>x.CustomerId);
+
+            modelBuilder.Entity<BasketProduct>().HasKey(x => new { x.BasketId, x.ProductId });
+            modelBuilder.Entity<Product>().HasMany(x => x.BasketProducts).WithOne(x => x.Product).HasForeignKey(x => x.ProductId);
+            modelBuilder.Entity<Basket>().HasMany(x => x.BasketProducts).WithOne(x => x.Basket).HasForeignKey(x => x.BasketId);
+
             modelBuilder.ApplyConfiguration(new ProductMap());
             modelBuilder.ApplyConfiguration(new CustomerMap());
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketProduct> BasketProducts { get; set; }
         public DbSet<Customer> Customers { get; set; }
     }
 }

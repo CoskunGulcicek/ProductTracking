@@ -23,6 +23,9 @@ namespace Tractking.Business.Containers.Microsoftioc
 
             services.AddScoped<IProductDal, EfProductRepository>();
             services.AddScoped<IProductService, ProductManager>();
+
+            services.AddScoped<IBasketDal, EfBasketRepository>();
+            services.AddScoped<IBasketService, BasketManager>();
         }
     }
 }

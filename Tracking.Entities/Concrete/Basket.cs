@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Tracking.Entities.Concrete
 {
-    public class Customer
+    public class Basket
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string SurName { get; set; }
-
-        public Basket Basket { get; set; }
+        public int CustomerId { get; set; }
+        
+        public Customer Customer { get; set; }
+        public List<BasketProduct> BasketProducts { get; set; }
 
     }
 }
