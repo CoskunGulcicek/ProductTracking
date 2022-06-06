@@ -64,6 +64,12 @@ namespace ProductTracking.Controllers
             return Ok(baskets);
         }
 
+        
+        public async Task<IActionResult> GetAllBasketsJsonAsync()
+        {
+            var baskets = await _basketService.GetAllAsync();
+            return Json(baskets);
+        }
 
     }
 }

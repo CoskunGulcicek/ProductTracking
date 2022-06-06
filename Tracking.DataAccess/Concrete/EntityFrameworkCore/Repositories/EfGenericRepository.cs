@@ -12,11 +12,12 @@ namespace Tracking.DataAccess.Concrete.EntityFrameworkCore.Repositories
 {
     public class EfGenericRepository<TEntity> : IGenericDal<TEntity> where TEntity : class, new()
     {
-        public async Task AddAsync(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
             using var context = new TrackingContext();
             await context.AddAsync(entity);
             await context.SaveChangesAsync();
+            return entity;
         }
 
         public async Task<List<TEntity>> GetAllAsync()

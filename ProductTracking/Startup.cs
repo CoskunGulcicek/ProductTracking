@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tractking.Business.Containers.Microsoftioc;
+using Tractking.Business.Interfaces;
 
 namespace ProductTracking
 {
@@ -29,6 +30,7 @@ namespace ProductTracking
             services.AddDependencies();
 
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
 
             // Auto Mapper Configurations
             var mappingConfig = new MapperConfiguration(mc =>
@@ -37,10 +39,17 @@ namespace ProductTracking
             });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            services.AddCors(options => options.AddDefaultPolicy(policy =>
+                policy.AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .SetIsOriginAllowed(origin => true)
+            ));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ICustomerService customerService,IProductService productService,IBasketService basketService,IBasketProductService basketProductService)
         {
             if (env.IsDevelopment())
             {
@@ -53,18 +62,25 @@ namespace ProductTracking
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            ProductTrackingInitilaizer.Seed(customerService, productService, basketService, basketProductService).Wait();
+
 
             app.UseRouting();
+            app.UseCors();
+
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
+                endpoints.MapDefaultControllerRoute();
+
+                /*endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");*/
             });
         }
     }

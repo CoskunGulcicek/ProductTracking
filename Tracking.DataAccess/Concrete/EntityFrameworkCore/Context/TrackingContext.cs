@@ -19,7 +19,6 @@ namespace Tracking.DataAccess.Concrete.EntityFrameworkCore.Context
         {
             modelBuilder.Entity<Basket>().HasOne(x => x.Customer).WithOne(x => x.Basket).HasForeignKey<Basket>(x=>x.CustomerId);
 
-            modelBuilder.Entity<BasketProduct>().HasKey(x => new { x.BasketId, x.ProductId });
             modelBuilder.Entity<Product>().HasMany(x => x.BasketProducts).WithOne(x => x.Product).HasForeignKey(x => x.ProductId);
             modelBuilder.Entity<Basket>().HasMany(x => x.BasketProducts).WithOne(x => x.Basket).HasForeignKey(x => x.BasketId);
 

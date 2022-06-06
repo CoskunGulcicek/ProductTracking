@@ -24,11 +24,33 @@ namespace ProductTracking.Controllers
             _productService = productService;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            return View(await _productService.GetAllAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(Product productAdd)
+        {
+            await _productService.AddAsync(productAdd);
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         public async Task<IActionResult> Add(ProductAddDto productAddDto)
         {
             await _productService.AddAsync(_mapper.Map<Product>(productAddDto));
             return Created("", productAddDto);
+        }
+
+        public async Task<IActionResult> Update(int id)
+        {
+            var currentProduct = await _productService.GetByIdAsync(id);
+            if (currentProduct != null)
+            {
+                return View(currentProduct);
+            }
+            return View();
         }
 
         [HttpPost]
@@ -38,12 +60,12 @@ namespace ProductTracking.Controllers
             if (currentProduct != null)
             {
                 await _productService.UpdateAsync(_mapper.Map<Product>(productUpdateDto));
-                return Ok();
+                return RedirectToAction("Index");
             }
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             await _productService.RemoveAsync(new Product() { Id = id });
@@ -62,6 +84,12 @@ namespace ProductTracking.Controllers
         {
             var products = await _productService.GetAllAsync();
             return Ok(products);
+        }
+
+        public async Task<IActionResult> GetAllProductsJsonAsync()
+        {
+            var products = await _productService.GetAllAsync();
+            return Json(products);
         }
 
     }

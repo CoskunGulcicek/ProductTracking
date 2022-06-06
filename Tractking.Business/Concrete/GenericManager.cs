@@ -16,9 +16,9 @@ namespace Tractking.Business.Concrete
             _genericDal = genericDal;
         }
 
-        public async Task AddAsync(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            await _genericDal.AddAsync(entity);
+            return await _genericDal.AddAsync(entity);
         }
 
         public async Task<TEntity> GetByIdAsync(int id)

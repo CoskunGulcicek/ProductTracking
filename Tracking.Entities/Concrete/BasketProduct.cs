@@ -8,12 +8,13 @@ namespace Tracking.Entities.Concrete
 {
     public class BasketProduct
     {
+        public int Id { get; set; }
         public int ProductId { get; set; }
         public int BasketId { get; set; }
         public Basket Basket { get; set; }
         public Product Product { get; set; }
 
-        public string Type { get; set; } //kg adet metre
+        public string Type { get; set; } //kg adet kasa metre bağ(bund)
         public Decimal Quantity { get; set; }
         public Decimal Total { get; set; }
 

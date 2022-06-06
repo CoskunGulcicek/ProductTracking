@@ -18,7 +18,7 @@ namespace Tracking.DataAccess.Concrete.Inferfaces
         Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter);
 
         Task<TEntity> GetByIdAsync(int id);
-        Task AddAsync(TEntity entity);
+        Task<TEntity> AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task RemoveAsync(TEntity entity);
     }

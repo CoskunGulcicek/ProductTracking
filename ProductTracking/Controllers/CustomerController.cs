@@ -23,12 +23,33 @@ namespace ProductTracking.Controllers
             _logger = logger;
             _customerService = customerService;
         }
+        public async Task<IActionResult> Index()
+        {
+            List<Customer> customers = await _customerService.GetAllAsync();
+            return View(customers);
+        }
 
         [HttpPost]
+        public async Task<IActionResult> Index(CustomerAddDto customerAddDto)
+        {
+            await _customerService.AddAsync(_mapper.Map<Customer>(customerAddDto));
+            return RedirectToAction("Index");
+        }
+
         public async Task<IActionResult> Add(CustomerAddDto customerAddDto)
         {
             await _customerService.AddAsync(_mapper.Map<Customer>(customerAddDto));
             return Created("", customerAddDto);
+        }
+
+        public async Task<IActionResult> Update(int id)
+        {
+            var currentCustomer = await _customerService.GetByIdAsync(id);
+            if (currentCustomer != null)
+            {
+                return View(currentCustomer);
+            }
+            return View();
         }
 
         [HttpPost]
@@ -38,16 +59,18 @@ namespace ProductTracking.Controllers
             if (currentCustomer != null)
             {
                 await _customerService.UpdateAsync(_mapper.Map<Customer>(customerUpdateDto));
-                return Ok();
+                return RedirectToAction("Index");
             }
             return NoContent();
         }
 
-        [HttpDelete]
+
+
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             await _customerService.RemoveAsync(new Customer() { Id = id });
-            return NoContent();
+            return Json("ok");
         }
 
         [HttpGet]
@@ -64,5 +87,11 @@ namespace ProductTracking.Controllers
             return Ok(customers);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllCustomersJsonAsync()
+        {
+            var customers = await _customerService.GetAllAsync();
+            return Json(new { data = customers });
+        }
     }
 }
