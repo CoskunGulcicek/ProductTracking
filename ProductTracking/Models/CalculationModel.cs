@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Tracking.Entities.Dtos.Product
+namespace ProductTracking.Models
 {
-    public class ProductUpdateDto
+    public class CalculationModel
     {
-        public int Id { get; set; }
         public string Name { get; set; }
-        public Decimal Price { get; set; }
         public string Type { get; set; }
+        public decimal Quantity { get; set; }
     }
 }

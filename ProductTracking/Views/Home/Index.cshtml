@@ -1,8 +1,80 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using ProductTracking.Models;
+@model CustomerProductModel
+
+@{
+	ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+ .dis option {
+  padding: 5px 0;
+  font-size: 8px;
+ }
+
+ .opt {
+  font-size: 8px;
+ }
+</style>
+<div class="container">
+	@{
+		int i = 0;
+		int j = 0;
+	}
+ <input type="hidden" name="customerCount" id="customerCount" value="@Model.Customers.Count()" />
+ <input type="hidden" name="productCount" id="productCount" value="@Model.Products.Count()" />
+ <form class="form-inline">
+	 	 <div class="row">
+	@foreach (var customer in Model.Customers)
+	{
+		i++;
+
+	  <label for="colFormLabel" class="col-sm-12 col-form-label text-white bg-dark form-control form-control-sm">@customer.Name @customer.SurName</label>
+
+
+			@foreach (var product in Model.Products)
+			{
+
+				j++;
+				var type = "type_" + i + "_" + j;
+				var quantity = "quantity_" + i + "_" + j;
+				var nameofproductlabel = "name_" + i + "_" + j;
+					var nameOfProduct = @product.Name;
+
+		  <div class="form-group mb-3" style="margin-right: 40px">
+		   <label for="colFormLabel" style="min-width:110px;max-width:110px;" class="col-form-label form-control form-control-sm" name="@nameofproductlabel" id="@nameofproductlabel">
+		   @product.Name
+		   </label>
+
+		   <select class="form-control form-control-sm" style="margin-right:15px;margin-left:15px;Border:none;appearance: none;background-color: #d1d1d1;" name="@type" id="@type">
+			<option value="Ks"><strong>Ks</strong></option>
+			<option value="Kg"><strong>Kg</strong></option>
+			<option value="Ad"><strong>Ad</strong></option>
+			<option value="Lt"><strong>Lt</strong></option>
+		   </select>
+		   <input type="text" class="form-control form-control-sm" value="0" name="@quantity" id="@quantity" size="1">
+		  </div>
+
+
+
+
+
+				if (j == @Model.Products.Count())
+				{
+					j = 0;
+				}
+			}
+	
+	 <hr>
+	}
+	 </div>
+	</form>
+ <button type="button" id="btnAddDealCalculate" class="btn btn-primary">Okey</button>
+ <hr />
 </div>
+<div class="container">
+ <div class="row" id="totalDiv">
+ </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/home.js"></script>
