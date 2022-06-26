@@ -2,6 +2,11 @@
 
 });
 
+
+function sendCustomer(data) {
+    alert(data);
+};
+
 $('#btnAddDealCalculate').click(function () {
     function sendCalculationData(data) {
 
