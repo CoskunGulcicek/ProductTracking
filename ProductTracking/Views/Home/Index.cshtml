@@ -2,47 +2,131 @@
 @model CustomerProductModel
 
 @{
-	ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home Page";
 }
 
 <style>
- .dis option {
-  padding: 5px 0;
-  font-size: 8px;
- }
+    .dis option {
+        padding: 5px 0;
+        font-size: 8px;
+    }
 
- .opt {
-  font-size: 8px;
- }
+    .opt {
+        font-size: 8px;
+    }
 </style>
-<div class="container">
-	@{
-		int i = 0;
-		int j = 0;
-	}
- <input type="hidden" name="customerCount" id="customerCount" value="@Model.Customers.Count()" />
- <input type="hidden" name="productCount" id="productCount" value="@Model.Products.Count()" />
- <form class="form-inline">
-  <div class="row">
-			@foreach (var customer in Model.Customers)
-			{
-				i++;
-
-	   <input type="text" name="customer_@i" id="customerButton" for="colFormLabel" class="col-sm-12 col-form-label text-white bg-dark form-control form-control-sm" value="@customer.Name @customer.SurName" onclick="javascript:sendCustomer(@i)"><br>
-		   <div class="form-group mb-12" style="min-width:1100px;">
-
-		   </div>
-	   
-			}
-  </div>
- </form>
- <p class="text-center"><button type="button" id="btnAddDealCalculate" class="btn btn-primary">Hesapla</button></p>
- <hr />
+<div class="container" name="calculation" id="calculation">
+    @{
+        int i = 0;
+        int j = 0;
+        int u = 0;
+    }
+    <input type="hidden" name="customerCount" id="customerCount" value="@Model.Customers.Count()" />
+    <input type="hidden" name="productCount" id="productCount" value="@Model.Products.Count()" />
+    <form id="content-pane">
+    </form>
+    <p class="text-center"><button type="button" id="btnAddDealCalculate" class="btn btn-primary">Hesapla</button></p>
+    <hr />
 </div>
 <div class="container">
- <div class="row" id="totalDiv">
- </div>
+    <div class="row" id="totalDiv">
+    </div>
 </div>
 
+<script type="text/x-handlebars-template" id="data-template">
+    {{#each customers}}
+    <div class="form-group">
+        <input type="text" id="customerButton" for="colFormLabel" class="col-sm-12 col-form-label text-white bg-dark form-control form-control-sm" value="{{name}} {{surName}}" onclick="javascript: sendCustomer({{id}})" data-toggle="modal" data-target=".bd-example-modal-lg"><br>
+        <input type="hidden" id="hiddenCustomerName_{{id}}" value="{{name}} {{surName}}" />
+        <div class="form-group mb-12" style="">
+            <div class='form-group row' data-cusid="{{id}}" style='' id="customer_{{id}}">
+                {{#each basket}}
+                <div class="col-3 product">
+                    <div class="row">
+                        <div class='col-sm-4'>
+                            <div class="">
+                                <label data-name="{{name}}" for='colFormLabel' style='' class='form-control-plaintext form-control-sm' name='nameofproduct' id='nameofproduct_{{name}}'>
+                                    {{name}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class='col-sm-4'>
+                            <div class="">
+                                <select class='form-control form-control-sm inpt-type' name='typeofproduct' id='typeofproduct' style='background-color: #d1d1d1;'>
+                                    <option value='Ks'><strong>Ks</strong></option>
+                                    <option value='Kg'><strong>Kg</strong></option>
+                                    <option value='Ad'><strong>Ad</strong></option>
+                                    <option value='Lt'><strong>Lt</strong></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class='col-sm-4'>
+                            <div class="">
+                                <input type='text' class='form-control form-control-sm inpt-quantity' value='{{quantity}}' name='quantityofproduct' id='quantityofproduct' size='1' width='20px'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+
+
+<!-- Large modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="myModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="hidden" name="modalCustomerId" id="modalCustomerId" />
+                <label for="message-text" class="col-form-label" id="modalCustomerNameTitle"> </label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @foreach (var urunler in Model.Products)
+                    {
+                        u++;
+                        <div class="col-sm-3">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" name="products" value="@urunler.Name" id="modalProduct_@u">
+                                    @urunler.Name
+                                </label>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="kisiyeUrunEkle">Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js" integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    var customers =  @Html.Raw(Json.Serialize(@Model.Customers));
+    var data = {
+        customers: customers
+    };
+</script>
 <script src="~/js/home.js"></script>
+
+<style>
+
+    .col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+        padding: 0 10px;
+    }
+
+    .row {
+        margin: 0 -10px;
+    }
+</style>
