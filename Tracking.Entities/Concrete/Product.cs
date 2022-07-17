@@ -11,9 +11,8 @@ namespace Tracking.Entities.Concrete
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Decimal Price { get; set; }
         public string Type { get; set; }// kg adet kasa metre bağ(bund)
 
-        public List<BasketProduct> BasketProducts { get; set; }
+        public List<CustomerProduct> CustomerProducts { get; set; }
     }
 }

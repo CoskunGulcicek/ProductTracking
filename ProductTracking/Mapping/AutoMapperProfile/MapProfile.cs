@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tracking.Entities.Concrete;
-using Tracking.Entities.Dtos.Basket;
 using Tracking.Entities.Dtos.Customer;
+using Tracking.Entities.Dtos.CustomerProduct;
+using Tracking.Entities.Dtos.List;
 using Tracking.Entities.Dtos.Product;
 
 namespace ProductTracking.Mapping.AutoMapperProfile
@@ -23,15 +24,6 @@ namespace ProductTracking.Mapping.AutoMapperProfile
             CreateMap<CustomerUpdateDto, Customer>();
             CreateMap<Customer, CustomerUpdateDto>();
 
-            CreateMap<BasketAddDto, Basket>();
-            CreateMap<Basket, BasketAddDto>();
-
-            CreateMap<BasketGetDto, Basket>();
-            CreateMap<Basket, BasketGetDto>();
-
-            CreateMap<BasketUpdateDto, Basket>();
-            CreateMap<Basket, BasketUpdateDto>();
-
             CreateMap<ProductAddDto, Product>();
             CreateMap<Product, ProductAddDto>();
             
@@ -40,6 +32,21 @@ namespace ProductTracking.Mapping.AutoMapperProfile
             
             CreateMap<ProductGetDto, Product>();
             CreateMap<Product, ProductGetDto>();
+
+            CreateMap<CustomerProductAddDto, CustomerProduct>();
+            CreateMap<CustomerProduct, CustomerProductAddDto>();
+
+            CreateMap<CustomerProductGetDto, CustomerProduct>();
+            CreateMap<CustomerProduct, CustomerProductGetDto>();
+
+            CreateMap<ListAddDto, List>();
+            CreateMap<List, ListAddDto>();
+
+            CreateMap<ListUpdateDto, List>();
+            CreateMap<List, ListUpdateDto>();
+
+            CreateMap<ListGetDto, List>();
+            CreateMap<List, ListGetDto>();
 
 
 

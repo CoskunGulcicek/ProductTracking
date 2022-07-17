@@ -18,6 +18,8 @@ namespace Tracking.DataAccess.Concrete.EntityFrameworkCore.Mapping
 
             builder.Property(x => x.Name).HasMaxLength(50);
             builder.Property(x => x.Name).IsRequired();
+
+            builder.HasOne(x => x.List).WithMany(x => x.Customers).HasForeignKey(x => x.ListId).OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

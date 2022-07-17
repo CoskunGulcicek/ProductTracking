@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tracking.DataAccess.Concrete.Inferfaces;
 using Tracking.Entities.Concrete;
+using Tracking.Entities.Dtos.Customer;
 using Tractking.Business.Interfaces;
 
 namespace Tractking.Business.Concrete
@@ -17,6 +18,11 @@ namespace Tractking.Business.Concrete
         {
             _genericDal = genericDal;
             _customerDal = customerDal;
+        }
+
+        public async Task<List<CustomerGetDto>> GetByListId(int Id)
+        {
+            return await _customerDal.GetByListId(Id);
         }
     }
 }

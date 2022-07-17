@@ -49,7 +49,7 @@ namespace ProductTracking
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ICustomerService customerService,IProductService productService,IBasketService basketService,IBasketProductService basketProductService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ICustomerService customerService,IProductService productService,IListService listService)
         {
             if (env.IsDevelopment())
             {
@@ -62,7 +62,7 @@ namespace ProductTracking
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            ProductTrackingInitilaizer.Seed(customerService, productService, basketService, basketProductService).Wait();
+            ProductTrackingInitilaizer.Seed(customerService, productService,listService).Wait();
 
 
             app.UseRouting();

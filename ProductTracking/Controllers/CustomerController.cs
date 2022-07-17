@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ProductTracking.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,19 +15,24 @@ namespace ProductTracking.Controllers
     public class CustomerController : Controller
     {
         private readonly ILogger<CustomerController> _logger;
+        private readonly IListService _listService;
         private readonly ICustomerService _customerService;
         private readonly IMapper _mapper;
 
-        public CustomerController(IMapper mapper, ILogger<CustomerController> logger, ICustomerService customerService)
+        public CustomerController(IMapper mapper, ILogger<CustomerController> logger, IListService listService, ICustomerService customerService)
         {
             _mapper = mapper;
             _logger = logger;
             _customerService = customerService;
+            _listService = listService;
         }
+
         public async Task<IActionResult> Index()
         {
-            List<Customer> customers = await _customerService.GetAllAsync();
-            return View(customers);
+            ListAndCustomerModel listAndCustomerModel = new ListAndCustomerModel();
+            listAndCustomerModel.lists = await _listService.GetAllAsync();
+            listAndCustomerModel.customers = await _customerService.GetAllAsync();
+            return View(listAndCustomerModel);
         }
 
         [HttpPost]
@@ -44,6 +50,7 @@ namespace ProductTracking.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
+            ViewBag.Lists = await _listService.GetAllAsync();
             var currentCustomer = await _customerService.GetByIdAsync(id);
             if (currentCustomer != null)
             {
@@ -55,6 +62,8 @@ namespace ProductTracking.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(CustomerUpdateDto customerUpdateDto)
         {
+
+            ViewBag.Lists = await _listService.GetAllAsync();
             var currentCustomer = await _customerService.GetByIdAsync(customerUpdateDto.Id);
             if (currentCustomer != null)
             {
@@ -93,5 +102,13 @@ namespace ProductTracking.Controllers
             var customers = await _customerService.GetAllAsync();
             return Json(new { data = customers });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetByListId(int Id)
+        {
+            var customers = await _customerService.GetByListId(Id);
+            return Json(customers);
+        }
+        
     }
 }

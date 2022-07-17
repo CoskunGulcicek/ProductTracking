@@ -9,12 +9,15 @@ using Tracking.Entities.Concrete;
 
 namespace Tracking.DataAccess.Concrete.EntityFrameworkCore.Mapping
 {
-    public class BasketMap : IEntityTypeConfiguration<Basket>
+    public class CustomerProductMap : IEntityTypeConfiguration<CustomerProduct>
     {
-        public void Configure(EntityTypeBuilder<Basket> builder)
+        public void Configure(EntityTypeBuilder<CustomerProduct> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).UseIdentityColumn();
+            builder.Property(x => x.Id)
+                .UseIdentityColumn();
+
+            builder.HasIndex(x => new { x.ProductId, x.CustomerId });
         }
     }
 }

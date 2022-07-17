@@ -50,7 +50,6 @@
 			<tr>
 				<th scope="col">#</th>
 				<th scope="col">İsim</th>
-				<th scope="col">Fiyat</th>
 				<th scope="col">Type</th>
 			</tr>
 		</thead>
@@ -61,7 +60,6 @@
 		   <tr>
 			<th scope="row">@item.Id</th>
 			<td>@item.Name</td>
-			<td>@item.Price</td>
 			<td>
 				<a class="btn btn-danger btn-sm" href="javascript:deleteProduct(@item.Id)">Sil</a> 
 				<a class="btn btn-warning btn-sm" href="/Product/Update?id=@item.Id">Güncelle</a></td>

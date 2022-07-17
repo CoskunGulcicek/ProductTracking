@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tracking.Entities.Dtos.Basket
+namespace Tracking.Entities.Dtos.CustomerProduct
 {
-    public class BasketUpdateDto
+    public class CustomerProductAddDto
     {
-        public int Id { get; set; }
         public int CustomerId { get; set; }
-
+        public int ProductId { get; set; }
     }
 }

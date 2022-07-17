@@ -5,19 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tracking.Entities.Concrete;
 
 namespace Tracking.DataAccess.Concrete.EntityFrameworkCore.Mapping
 {
-    public class BasketProductMap : IEntityTypeConfiguration<BasketProduct>
+    public class ListMap : IEntityTypeConfiguration<Entities.Concrete.List>
     {
-        public void Configure(EntityTypeBuilder<BasketProduct> builder)
+        public void Configure(EntityTypeBuilder<Entities.Concrete.List> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id)
-                .UseIdentityColumn();
+            builder.Property(x => x.Id).UseIdentityColumn();
 
-            builder.HasIndex(x => new { x.ProductId, x.BasketId });
+            builder.Property(x => x.Name).HasMaxLength(50);
+            builder.Property(x => x.Name).IsRequired();
         }
     }
 }

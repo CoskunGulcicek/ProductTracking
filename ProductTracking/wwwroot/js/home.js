@@ -90,7 +90,7 @@ $('#btnAddDealCalculate').click(function () {
                     $("#totalDiv").append(alanlar);
                 }
             },
-            contentType: 'application/json',
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             error: function () {
                 $('#saveModal').modal('hide');
                 alertify.warning('an access problem');

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,8 @@ using Tracking.Entities.Concrete;
 
 namespace Tracking.DataAccess.Concrete.Inferfaces
 {
-    public interface IBasketProductDal : IGenericDal<BasketProduct>
+    public interface ICustomerProductDal : IGenericDal<CustomerProduct>
     {
+        //Task<List<CustomerProduct>> customerProducts();
     }
 }

@@ -8,7 +8,7 @@ using Tracking.Entities.Concrete;
 
 namespace Tracking.DataAccess.Concrete.EntityFrameworkCore.Repositories
 {
-    public class EfBasketProductRepository : EfGenericRepository<BasketProduct>,IBasketProductDal
+    public class EfCustomerProductRepository : EfGenericRepository<CustomerProduct>, ICustomerProductDal
     {
     }
 }

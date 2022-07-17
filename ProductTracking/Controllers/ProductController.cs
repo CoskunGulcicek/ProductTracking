@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ProductTracking.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tracking.Entities.Concrete;
+using Tracking.Entities.Dtos.CustomerProduct;
 using Tracking.Entities.Dtos.Product;
 using Tractking.Business.Interfaces;
 
@@ -15,13 +17,15 @@ namespace ProductTracking.Controllers
     {
         private readonly ILogger<ProductController> _logger;
         private readonly IProductService _productService;
+        private readonly ICustomerProductService _customerProductService;
         private readonly IMapper _mapper;
 
-        public ProductController(IMapper mapper, ILogger<ProductController> logger, IProductService productService)
+        public ProductController(IMapper mapper, ILogger<ProductController> logger, IProductService productService, ICustomerProductService customerProductService)
         {
             _mapper = mapper;
             _logger = logger;
             _productService = productService;
+            _customerProductService = customerProductService;
         }
 
         public async Task<IActionResult> Index()
@@ -41,6 +45,25 @@ namespace ProductTracking.Controllers
         {
             await _productService.AddAsync(_mapper.Map<Product>(productAddDto));
             return Created("", productAddDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProductToCustomers([FromBody]List<AddProductToCustomer> customerProduct)
+        {
+            if(customerProduct.Count > 0)
+            {
+                foreach (var item in customerProduct)
+                {
+                    if((item.ProductId != 0 && item.ProductId > 0) && (item.CustomerId != 0 && item.CustomerId>0))
+                    {
+                        CustomerProductAddDto cp = new CustomerProductAddDto();
+                        cp.CustomerId = item.CustomerId;
+                        cp.ProductId = item.ProductId;
+                        await _customerProductService.AddAsync(_mapper.Map<CustomerProduct>(cp));
+                    }
+                }
+            }
+            return Created("", customerProduct);
         }
 
         public async Task<IActionResult> Update(int id)
