@@ -1,5 +1,5 @@
 ﻿@using Tracking.Entities.Concrete;
-@model List<Customer>
+@model ListAndCustomerModel
 
 <div class="container">
 	<p class="right">
@@ -24,12 +24,19 @@
 								<label for="message-text" class="col-form-label">Soyisim:</label>
 								<input type="text" class="form-control" name="surName"></input>
 							</div>
-						
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Lists:</label>
+                                <select class="form-select  form-control" aria-label="Default select example" name="ListId">
+                                    @foreach (var l in Model.lists)
+                                    {
+                                        <option value="@l.Id">@l.Name</option>
+                                    }
+                                </select>
+                            </div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 						<button type="submit" class="btn btn-primary">Ekle</button>
-						
 					</div>
 					</form>
 				</div>
@@ -42,17 +49,19 @@
 				<th scope="col">#</th>
 				<th scope="col">İsim</th>
 				<th scope="col">Soyisim</th>
+				<th scope="col">ListName</th>
 				<th scope="col">Edit</th>
 			</tr>
 		</thead>
 		<tbody>
 
-			@foreach (var item in Model)
+			@foreach (var item in Model.customers)
 			{
 		   <tr>
 			<th scope="row">@item.Id</th>
 			<td>@item.Name</td>
 			<td>@item.SurName</td>
+			<td>@Model.lists.Where(x => x.Id == item.ListId).Select(x => x.Name).FirstOrDefault()</td>
 			<td>
 				<a class="btn btn-danger btn-sm" href="javascript:deleteCustomer(@item.Id)">Sil</a> 
 				<a class="btn btn-warning btn-sm" href="/Customer/Update?id=@item.Id">Güncelle</a></td>

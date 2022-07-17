@@ -9,14 +9,15 @@ using Tractking.Business.Interfaces;
 
 namespace Tractking.Business.Concrete
 {
-    public class BasketManager : GenericManager<Basket>, IBasketService
+    public class ListManager : GenericManager<Tracking.Entities.Concrete.List>, IListService
     {
-        private readonly IGenericDal<Basket> _genericDal;
-        private readonly IBasketDal _basketDal;
-        public BasketManager(IGenericDal<Basket> genericDal, IBasketDal basketDal) : base(genericDal)
+        private readonly IGenericDal<Tracking.Entities.Concrete.List> _genericDal;
+        private readonly IListDal _listDal;
+
+        public ListManager(IGenericDal<List> genericDal, IListDal listDal):base(genericDal)
         {
             _genericDal = genericDal;
-            _basketDal = basketDal;
+            _listDal = listDal;
         }
     }
 }

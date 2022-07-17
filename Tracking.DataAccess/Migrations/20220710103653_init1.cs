@@ -2,22 +2,21 @@
 
 namespace Tracking.DataAccess.Migrations
 {
-    public partial class init : Migration
+    public partial class init1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Customers",
+                name: "Lists",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    SurName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.PrimaryKey("PK_Lists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -27,7 +26,6 @@ namespace Tracking.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -36,45 +34,47 @@ namespace Tracking.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Baskets",
+                name: "Customers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerId = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    SurName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ListId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Baskets", x => x.Id);
+                    table.PrimaryKey("PK_Customers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Baskets_Customers_CustomerId",
+                        name: "FK_Customers_Lists_ListId",
+                        column: x => x.ListId,
+                        principalTable: "Lists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomerProducts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerProducts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CustomerProducts_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BasketProducts",
-                columns: table => new
-                {
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    BasketId = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BasketProducts", x => new { x.BasketId, x.ProductId });
                     table.ForeignKey(
-                        name: "FK_BasketProducts_Baskets_BasketId",
-                        column: x => x.BasketId,
-                        principalTable: "Baskets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BasketProducts_Products_ProductId",
+                        name: "FK_CustomerProducts_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -82,30 +82,34 @@ namespace Tracking.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BasketProducts_ProductId",
-                table: "BasketProducts",
-                column: "ProductId");
+                name: "IX_CustomerProducts_CustomerId",
+                table: "CustomerProducts",
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Baskets_CustomerId",
-                table: "Baskets",
-                column: "CustomerId",
-                unique: true);
+                name: "IX_CustomerProducts_ProductId_CustomerId",
+                table: "CustomerProducts",
+                columns: new[] { "ProductId", "CustomerId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customers_ListId",
+                table: "Customers",
+                column: "ListId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BasketProducts");
+                name: "CustomerProducts");
 
             migrationBuilder.DropTable(
-                name: "Baskets");
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Lists");
         }
     }
 }

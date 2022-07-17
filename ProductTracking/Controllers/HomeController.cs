@@ -15,47 +15,53 @@ namespace ProductTracking.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ICustomerService _customerService;
         private readonly IProductService _productService;
-        public HomeController(ILogger<HomeController> logger,IProductService productService, ICustomerService customerService)
+        private readonly IListService _listService;
+        public HomeController(ILogger<HomeController> logger, IProductService productService, ICustomerService customerService, IListService listService)
         {
             _logger = logger;
             _productService = productService;
             _customerService = customerService;
+            _listService = listService;
         }
+
 
         public async Task<IActionResult> Index()
         {
-            CustomerProductModel customerProductModel = new CustomerProductModel();
-            customerProductModel.Products = await _productService.GetAllAsync();
-            customerProductModel.Customers = await _customerService.GetAllAsync();
-            return View(customerProductModel);
+            ViewBag.Products = await _productService.GetAllAsync();
+            ViewBag.Customers = await _customerService.GetAllAsync();
+            ViewBag.Lists = await _listService.GetAllAsync();
+            return View();
         }
-        
+
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody]List<CalculationModel> calculationModel)
+        public async Task<IActionResult> Add([FromBody] List<CalculationModel> calculationModel)
         {
             List<CalculationModel> newList = new List<CalculationModel>();
             foreach (var item in calculationModel)
             {
-                var varMı = newList.Where(x => x.Name == item.Name && x.Type == item.Type).FirstOrDefault();
-                if (varMı==null)
+                if (item.Name != null && item.Quantity.ToString() != null && item.Type != null)
                 {
-                    newList.Add(item);
-                }
-                else
-                {
-                    var tipeGoreVarMı = newList.Where(x => x.Name == item.Name && x.Type == item.Type).FirstOrDefault();
-                    if (tipeGoreVarMı == null)
+                    var varMı = newList.Where(x => x.Name == item.Name && x.Type == item.Type).FirstOrDefault();
+                    if (varMı == null)
                     {
                         newList.Add(item);
                     }
                     else
                     {
-                        decimal itemQ = item.Quantity == null ? 0 : item.Quantity;
-                        newList.Where(x => x.Name == item.Name && x.Type == item.Type).Select(x => x.Quantity = (x.Quantity+itemQ)).ToList();
+                        var tipeGoreVarMı = newList.Where(x => x.Name == item.Name && x.Type == item.Type).FirstOrDefault();
+                        if (tipeGoreVarMı == null)
+                        {
+                            newList.Add(item);
+                        }
+                        else
+                        {
+                            decimal itemQ = item.Quantity.ToString() == null ? 0 : item.Quantity;
+                            newList.Where(x => x.Name == item.Name && x.Type == item.Type).Select(x => x.Quantity = (x.Quantity + itemQ)).ToList();
+                        }
                     }
                 }
             }
-            return Json(newList.Where(x=>x.Quantity>0).OrderBy(x => x.Name));
+            return Json(newList.Where(x => x.Quantity > 0).OrderBy(x => x.Name));
         }
         public IActionResult Privacy()
         {

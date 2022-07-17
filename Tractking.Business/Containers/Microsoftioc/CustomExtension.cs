@@ -21,14 +21,15 @@ namespace Tractking.Business.Containers.Microsoftioc
             services.AddScoped<ICustomerDal, EfCustomerRepository>();
             services.AddScoped<ICustomerService, CustomerManager>();
 
+            services.AddScoped<ICustomerProductDal, EfCustomerProductRepository>();
+            services.AddScoped<ICustomerProductService, CustomerProductManager>();
+
             services.AddScoped<IProductDal, EfProductRepository>();
             services.AddScoped<IProductService, ProductManager>();
 
-            services.AddScoped<IBasketDal, EfBasketRepository>();
-            services.AddScoped<IBasketService, BasketManager>();
+            services.AddScoped<IListDal, EfListRepository>();
+            services.AddScoped<IListService, ListManager>();
 
-            services.AddScoped<IBasketProductDal, EfBasketProductRepository>();
-            services.AddScoped<IBasketProductService, BasketProductManager>();
         }
     }
 }

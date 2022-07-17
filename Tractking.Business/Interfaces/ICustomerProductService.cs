@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Tracking.Entities.Concrete;
 
-namespace Tracking.DataAccess.Concrete.Inferfaces
+namespace Tractking.Business.Interfaces
 {
-    public interface IBasketDal : IGenericDal<Basket>
+    public interface  ICustomerProductService : IGenericService<CustomerProduct>
     {
     }
 }

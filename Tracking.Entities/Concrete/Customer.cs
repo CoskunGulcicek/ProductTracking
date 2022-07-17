@@ -12,7 +12,10 @@ namespace Tracking.Entities.Concrete
         public string Name { get; set; }
         public string SurName { get; set; }
 
-        public Basket Basket { get; set; }
+        public int? ListId { get; set; }
+        public List List { get; set; }
+
+        public List<CustomerProduct> CustomerProducts { get; set; }
 
     }
 }
