@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProductTracking.Models;
@@ -26,6 +27,7 @@ namespace ProductTracking.Controllers
             _customerService = customerService;
             _listService = listService;
         }
+
         public async Task<IActionResult> Index()
         {
             ListAndCustomerModel listAndCustomerModel = new ListAndCustomerModel();

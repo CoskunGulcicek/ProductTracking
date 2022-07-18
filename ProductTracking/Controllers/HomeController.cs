@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProductTracking.Models;
 using System;
@@ -24,6 +26,32 @@ namespace ProductTracking.Controllers
             _listService = listService;
         }
 
+
+        public async Task<IActionResult> LogIn()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogIn(LoginModel loginModel)
+        {
+            string currentName = "Kenan Baba";
+            string currentPassword = "998877";
+            if ((loginModel.UserName == null || loginModel.Password == null || loginModel.Password2 == null) && (loginModel.UserName == "" || loginModel.Password == "" || loginModel.Password2 == ""))
+            {
+                return RedirectToAction("LogIn");
+
+            }
+            else
+            {
+                if(currentName == loginModel.UserName && currentPassword == loginModel.Password)
+                {
+                    HttpContext.Session.SetString("username", loginModel.UserName);
+                    return RedirectToAction("Index");
+                }
+                return RedirectToAction("LogIn");
+            }
+        }
 
         public async Task<IActionResult> Index()
         {
