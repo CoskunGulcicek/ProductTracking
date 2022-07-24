@@ -10,7 +10,7 @@ using Tracking.DataAccess.Concrete.EntityFrameworkCore.Context;
 namespace Tracking.DataAccess.Migrations
 {
     [DbContext(typeof(TrackingContext))]
-    [Migration("20220710103653_init1")]
+    [Migration("20220721183234_init1")]
     partial class init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,6 +66,9 @@ namespace Tracking.DataAccess.Migrations
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
@@ -92,6 +95,30 @@ namespace Tracking.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Lists");
+                });
+
+            modelBuilder.Entity("Tracking.Entities.Concrete.ListCustomer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ListId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ListId", "CustomerId");
+
+                    b.ToTable("ListCustomers");
                 });
 
             modelBuilder.Entity("Tracking.Entities.Concrete.Product", b =>
@@ -145,14 +172,37 @@ namespace Tracking.DataAccess.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Tracking.Entities.Concrete.ListCustomer", b =>
+                {
+                    b.HasOne("Tracking.Entities.Concrete.Customer", "Customer")
+                        .WithMany("ListCustomers")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tracking.Entities.Concrete.List", "List")
+                        .WithMany("ListCustomers")
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("List");
+                });
+
             modelBuilder.Entity("Tracking.Entities.Concrete.Customer", b =>
                 {
                     b.Navigation("CustomerProducts");
+
+                    b.Navigation("ListCustomers");
                 });
 
             modelBuilder.Entity("Tracking.Entities.Concrete.List", b =>
                 {
                     b.Navigation("Customers");
+
+                    b.Navigation("ListCustomers");
                 });
 
             modelBuilder.Entity("Tracking.Entities.Concrete.Product", b =>

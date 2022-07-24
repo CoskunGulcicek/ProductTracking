@@ -7,7 +7,7 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-sm-4 offset-4">
+        <div class="col-sm-4 offset-3">
             <select class="form-select form-control" onchange="javascript:getUsersBylistId()" aria-label="Default select example" name="ListId" id="indexSelectedListId">
                 @foreach (var l in ViewBag.lists)
                 {
@@ -15,6 +15,10 @@
                 }
             </select>
         </div>
+         <div class="col-sm-4">
+            <a class="btn btn-warning mb-2" data-toggle="modal" data-target="#listCustomerModal" style="font-size:0.8em;">KişiEkle</a>
+            <a class="btn btn-danger mb-2" id="ilgiliListeyiBosalt" style="font-size:0.8em;">Listeyi Boşalt</a>
+         </div>
     </div>
 
     <div class="row">
@@ -34,7 +38,7 @@
     <div class="row" id="totalDiv">
     </div>
 </div>
-<!-- Large modal -->
+<!-- kullanıcıya ürün ekleme modali -->
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="myModal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -63,6 +67,40 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="kisiyeUrunEkle">Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- listeye kullanıcı ekleme modalı -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="listCustomerModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="hidden" name="modalCustomerId" id="modalCustomerId" />
+                <label for="message-text" class="col-form-label" id="modalCustomerNameTitle"> </label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @foreach (var customer in ViewBag.Customers)
+                    {
+                        <div class="col-sm-3">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" name="products" value="@customer.Id">
+                                    @customer.Name
+                                </label>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="listeyeCustomerEkle">Ekle</button>
             </div>
         </div>
     </div>

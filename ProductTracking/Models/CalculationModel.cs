@@ -10,5 +10,7 @@ namespace ProductTracking.Models
         public string Name { get; set; }
         public string Type { get; set; }
         public decimal Quantity { get; set; }
+        public int cusId { get; set; }
+        public int prodId { get; set; }
     }
 }

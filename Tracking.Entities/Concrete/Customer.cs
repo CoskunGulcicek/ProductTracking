@@ -16,6 +16,7 @@ namespace Tracking.Entities.Concrete
         public List List { get; set; }
 
         public List<CustomerProduct> CustomerProducts { get; set; }
+        public List<ListCustomer> ListCustomers { get; set; }
 
     }
 }

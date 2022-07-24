@@ -31,7 +31,7 @@ namespace ProductTracking.Controllers
         {
             ListAndCustomerModel listAndCustomerModel = new ListAndCustomerModel();
             listAndCustomerModel.lists = await _listService.GetAllAsync();
-            listAndCustomerModel.customers = await _customerService.GetAllAsync();
+            listAndCustomerModel.customers= await _customerService.GetAllAsync();
             return View(listAndCustomerModel);
         }
 
@@ -103,12 +103,18 @@ namespace ProductTracking.Controllers
             return Json(new { data = customers });
         }
 
-        [HttpGet]
+/*        [HttpGet]
         public async Task<IActionResult> GetByListId(int Id)
         {
             var customers = await _customerService.GetByListId(Id);
             return Json(customers);
+        }*/
+
+        [HttpGet]
+        public async Task<IActionResult> GetByListId(int Id)
+        {
+            var customers = await _customerService.GetByLstCusIds(Id);
+            return Json(customers);
         }
-        
     }
 }
