@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    var target = document.getElementById("customersDiv");
+    var target = document.getElementById("accordionPanelsStayOpenExample");
     target.innerHTML = "";
     getUsersBylistId();
 });
@@ -111,7 +111,7 @@ $('#calculate').click(function () {
     }
 
     var calculationData = [];
-    $('#customersDiv .products').each(function () {
+    $('#accordionPanelsStayOpenExample .products').each(function () {
         var product = $(this);
         var quantityDoluMu = product.find('[name=quantityofproduct]').val();
         if (quantityDoluMu != "") {
@@ -138,7 +138,7 @@ $('#calculate').click(function () {
 function getUsersBylistId() {
     totalDiv.innerHTML = "";
     var listId = $('#indexSelectedListId').val();
-    var target = document.getElementById("customersDiv");
+    var target = document.getElementById("accordionPanelsStayOpenExample");
     target.innerHTML = "";
     $.ajax({
         type: 'GET',
@@ -151,36 +151,36 @@ function getUsersBylistId() {
                 for (var j = 0; j < data[i].products.length; j++) {
                     productLines += `<div class="products col-sm-3">
                                         <div class="row">
-                                        <div class="col-sm-8">
-                                                      <input type="text" class="form-control" style="font-size:0.8em;" name="productname" placeholder="ProductName"  value="${data[i].products[j].productName}"  disabled>
-                                                      <input type="hidden" name="userId" id="userId" value="${data[i].id}">
-                                                      <input type="hidden" name="productId" id="productId" value="${data[i].products[j].productId}">
-                                                </div>
-                                                <div class="col-sm-4 form-inline">
-                                                      <input type="text" class="form-control"  style="width:55px;margin-left:-30px;font-size:0.8em;" name="quantityofproduct" value="${data[i].products[j].quantity}">
-                                                      <a class="btn btn-danger btn-sm" style="opacity:0.5;" onclick="javascript:urunSil(${data[i].products[j].id})">x</a>
-                                                </div>
-                                            </div>
-                                           </div>
-                                    `;
-                }
-                target.innerHTML += `<div class="form-row align-items-center">
-                                        <div class="col-auto">
-                                          <div class="input-group mb-2">
-                                            <input type="text" class="form-control" id="inlineFormInputGroup_${data[i].id}" disabled value="${mergedName}" style="font-weight: bold;">
-                                          </div>
-                                        </div>
-                                        <div class="col-auto">
-                                          <a class="btn btn-warning mb-2" data-toggle="modal" data-target="#myModal" onclick="javascript:sendCustomer(${data[i].id})" style="font-size:0.8em;">Ürün Ekle</a>
-                                          <a class="btn btn-danger mb-2" onclick="javascript:deleteCustomerFromList(${data[i].id})" style="font-size:0.8em;">Listeden Sil</a>
-                                        </div>
-                                      </div>
-
-                                        <div class="w-auto p-3" style="background-color: #eee;margin-top:-8px;margin-bottom:10px;">
-                                            <div class="row">
-                                                ${productLines}
+                                            <div class="col-sm-8">
+                                                          <input type="text" class="form-control" style="font-size:0.8em;" name="productname" placeholder="ProductName"  value="${data[i].products[j].productName}"  disabled>
+                                                          <input type="hidden" name="userId" id="userId" value="${data[i].id}">
+                                                          <input type="hidden" name="productId" id="productId" value="${data[i].products[j].productId}">
+                                                    </div>
+                                                    <div class="col-sm-4 form-inline">
+                                                          <input type="text" class="form-control"  style="width:55px;margin-left:-30px;font-size:0.8em;" name="quantityofproduct" value="${data[i].products[j].quantity}">
+                                                          <a class="btn btn-danger btn-sm" style="opacity:0.5;" onclick="javascript:urunSil(${data[i].products[j].id})">x</a>
+                                                    </div>
                                             </div>
                                         </div>`;
+                }
+                target.innerHTML += `
+                        <div class="accordion-item">
+                                  <a class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo_${i}" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo_${i}">
+                                    ${mergedName}
+                                  </a>
+                                  <a class="btn btn-warning btn-sm btn_urun_ekle" data-toggle="modal" data-target="#myModal" onclick="javascript:sendCustomer(${data[i].id})" style="font-size:0.8em;">Ürün Ekle</a>
+                                  <a class="btn btn-danger btn-sm btn_listeden_sil" onclick="javascript:deleteCustomerFromList(${data[i].id})" style="font-size:0.8em;">Listeden Sil</a>
+                                
+                                <div id="panelsStayOpen-collapseTwo_${i}" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo" style="">
+                                  <div class="accordion-body">
+                                    
+                                            <div class="row">
+                                    ${productLines}
+                                    </div>
+                                </div>
+                         </div>
+
+                                    `;
                 productLines = "";
             }
         },
