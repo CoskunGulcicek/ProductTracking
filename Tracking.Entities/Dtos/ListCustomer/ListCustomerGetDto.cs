@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tracking.Entities.Dtos.CustomerProduct
+namespace Tracking.Entities.Dtos.ListCustomer
 {
-    public class CustomerProductAddDto
+    public class ListCustomerGetDto
     {
+        public int Id { get; set; }
+        public int ListId { get; set; }
         public int CustomerId { get; set; }
-        public int ProductId { get; set; }
-        public decimal Quantity { get; set; }
 
     }
 }

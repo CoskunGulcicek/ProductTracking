@@ -24,5 +24,10 @@ namespace Tractking.Business.Concrete
         {
             return await _customerDal.GetByListId(Id);
         }
+
+        public async Task<List<CustomerGetDto>> GetByLstCusIds(int ListId)
+        {
+            return await _customerDal.GetByLstCusIds(ListId);
+        }
     }
 }

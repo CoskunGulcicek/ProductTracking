@@ -7,6 +7,7 @@ using Tracking.Entities.Concrete;
 using Tracking.Entities.Dtos.Customer;
 using Tracking.Entities.Dtos.CustomerProduct;
 using Tracking.Entities.Dtos.List;
+using Tracking.Entities.Dtos.ListCustomer;
 using Tracking.Entities.Dtos.Product;
 
 namespace ProductTracking.Mapping.AutoMapperProfile
@@ -48,7 +49,11 @@ namespace ProductTracking.Mapping.AutoMapperProfile
             CreateMap<ListGetDto, List>();
             CreateMap<List, ListGetDto>();
 
+            CreateMap<ListCustomerAddDto, ListCustomer>();
+            CreateMap<ListCustomer, ListCustomerAddDto>();
 
+            CreateMap<ListCustomerGetDto, ListCustomer>();
+            CreateMap<ListCustomer, ListCustomerGetDto>();
 
         }
     }

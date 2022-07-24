@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tracking.Entities.Concrete;
-using Tracking.Entities.Dtos.Customer;
 
 namespace Tracking.DataAccess.Concrete.Inferfaces
 {
-    public interface ICustomerDal : IGenericDal<Customer>
+    public interface IListCustomerDal : IGenericDal<ListCustomer>
     {
-        Task<List<CustomerGetDto>> GetByListId(int Id);
-        Task<List<CustomerGetDto>> GetByLstCusIds(int ListId);
 
     }
 }

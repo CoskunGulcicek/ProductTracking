@@ -30,7 +30,9 @@ namespace ProductTracking.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _productService.GetAllAsync());
+            var products = await _productService.GetAllAsync();
+            var orderedPs = products.OrderBy(x => x.Name).ToList();
+            return View(orderedPs);
         }
 
         [HttpPost]

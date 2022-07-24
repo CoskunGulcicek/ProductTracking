@@ -11,5 +11,7 @@ namespace Tractking.Business.Interfaces
     public interface ICustomerService : IGenericService<Customer>
     {
         Task<List<CustomerGetDto>> GetByListId(int Id);
+        Task<List<CustomerGetDto>> GetByLstCusIds(int ListId);
+
     }
 }

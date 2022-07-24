@@ -11,5 +11,7 @@ namespace Tracking.Entities.Dtos.CustomerProduct
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
         public string Name { get; set; }
+        public decimal Quantity { get; set; }
+
     }
 }

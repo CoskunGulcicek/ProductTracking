@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Tracking.DataAccess.Concrete.EntityFrameworkCore.Context;
+using Tracking.Entities.Concrete;
 using Tractking.Business.Interfaces;
 
 namespace ProductTracking.Controllers
@@ -18,12 +20,14 @@ namespace ProductTracking.Controllers
         private readonly ICustomerService _customerService;
         private readonly IProductService _productService;
         private readonly IListService _listService;
-        public HomeController(ILogger<HomeController> logger, IProductService productService, ICustomerService customerService, IListService listService)
+        private readonly ICustomerProductService _customerProductService;
+        public HomeController(ILogger<HomeController> logger, IProductService productService, ICustomerService customerService, IListService listService, ICustomerProductService customerProductService)
         {
             _logger = logger;
             _productService = productService;
             _customerService = customerService;
             _listService = listService;
+            _customerProductService = customerProductService;
         }
 
 
@@ -55,15 +59,42 @@ namespace ProductTracking.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.Products = await _productService.GetAllAsync();
-            ViewBag.Customers = await _customerService.GetAllAsync();
-            ViewBag.Lists = await _listService.GetAllAsync();
+            var products = await _productService.GetAllAsync();
+            var customers = await _customerService.GetAllAsync();
+            var lists = await _listService.GetAllAsync();
+
+            ViewBag.Products = products.OrderBy(x => x.Name).ToList();
+            ViewBag.Customers = customers.OrderBy(x => x.Name).ToList();
+            ViewBag.Lists = lists.OrderBy(x => x.Name).ToList();
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] List<CalculationModel> calculationModel)
         {
+            using var Context = new TrackingContext();
+            if (calculationModel.Count > 0)
+            {
+                foreach (var currentCal in calculationModel)
+                {
+                    int deletedId = Context.CustomerProducts.Where(x => x.CustomerId == currentCal.cusId && x.ProductId == currentCal.prodId).Select(x => x.Id).FirstOrDefault();
+                    if (deletedId != null && deletedId != 0)
+                    {
+                        await _customerProductService.RemoveAsync(new CustomerProduct() { Id = deletedId });
+                    }
+                }
+                foreach (var currentCal in calculationModel)
+                {
+                    CustomerProduct goToDb = new CustomerProduct();
+                    goToDb.CustomerId = currentCal.cusId;
+                    goToDb.ProductId = currentCal.prodId;
+                    goToDb.Quantity = currentCal.Quantity;
+                    await _customerProductService.AddAsync(goToDb);
+                }
+            }
+
+
+            //burada ekrana basmak için göndereceği jsonu hazırlıyor
             List<CalculationModel> newList = new List<CalculationModel>();
             foreach (var item in calculationModel)
             {

@@ -24,6 +24,9 @@ namespace Tractking.Business.Containers.Microsoftioc
             services.AddScoped<ICustomerProductDal, EfCustomerProductRepository>();
             services.AddScoped<ICustomerProductService, CustomerProductManager>();
 
+            services.AddScoped<IListCustomerDal, EfListCustomerRepository>();
+            services.AddScoped<IListCustomerService, ListCustomerManager>();
+
             services.AddScoped<IProductDal, EfProductRepository>();
             services.AddScoped<IProductService, ProductManager>();
 

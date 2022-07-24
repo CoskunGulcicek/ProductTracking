@@ -23,7 +23,11 @@ namespace Tracking.DataAccess.Concrete.EntityFrameworkCore.Context
             modelBuilder.Entity<Product>().HasMany(x => x.CustomerProducts).WithOne(x => x.Product).HasForeignKey(x => x.ProductId);
             modelBuilder.Entity<Customer>().HasMany(x => x.CustomerProducts).WithOne(x => x.Customer).HasForeignKey(x => x.CustomerId);
 
+            modelBuilder.Entity<List>().HasMany(x => x.ListCustomers).WithOne(x => x.List).HasForeignKey(x => x.ListId);
+            modelBuilder.Entity<Customer>().HasMany(x => x.ListCustomers).WithOne(x => x.Customer).HasForeignKey(x => x.CustomerId);
+
             modelBuilder.ApplyConfiguration(new CustomerProductMap());
+            modelBuilder.ApplyConfiguration(new ListCustomerMap());
             modelBuilder.ApplyConfiguration(new ProductMap());
             modelBuilder.ApplyConfiguration(new CustomerMap());
             modelBuilder.ApplyConfiguration(new ListMap());
@@ -32,5 +36,6 @@ namespace Tracking.DataAccess.Concrete.EntityFrameworkCore.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CustomerProduct> CustomerProducts { get; set; }
+        public DbSet<ListCustomer> ListCustomers { get; set; }
     }
 }
