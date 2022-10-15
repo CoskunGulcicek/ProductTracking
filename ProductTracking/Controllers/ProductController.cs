@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tracking.DataAccess.Concrete.EntityFrameworkCore.Context;
 using Tracking.Entities.Concrete;
 using Tracking.Entities.Dtos.CustomerProduct;
 using Tracking.Entities.Dtos.Product;
@@ -52,16 +53,21 @@ namespace ProductTracking.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProductToCustomers([FromBody]List<AddProductToCustomer> customerProduct)
         {
-            if(customerProduct.Count > 0)
+            using var Context = new TrackingContext();
+            if (customerProduct.Count > 0)
             {
                 foreach (var item in customerProduct)
                 {
                     if((item.ProductId != 0 && item.ProductId > 0) && (item.CustomerId != 0 && item.CustomerId>0))
                     {
-                        CustomerProductAddDto cp = new CustomerProductAddDto();
-                        cp.CustomerId = item.CustomerId;
-                        cp.ProductId = item.ProductId;
-                        await _customerProductService.AddAsync(_mapper.Map<CustomerProduct>(cp));
+                        var isExist = Context.CustomerProducts.Where(x => x.CustomerId == item.CustomerId && x.ProductId == item.ProductId).FirstOrDefault();
+                        if (isExist == null)
+                        {
+                            CustomerProductAddDto cp = new CustomerProductAddDto();
+                            cp.CustomerId = item.CustomerId;
+                            cp.ProductId = item.ProductId;
+                            await _customerProductService.AddAsync(_mapper.Map<CustomerProduct>(cp));
+                        }
                     }
                 }
             }

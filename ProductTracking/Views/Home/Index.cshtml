@@ -7,7 +7,7 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-sm-4 offset-3">
+        <div class="col-sm-4 offset-2">
             <select class="form-select form-control" onchange="javascript:getUsersBylistId()" aria-label="Default select example" name="ListId" id="indexSelectedListId">
                 @foreach (var l in ViewBag.lists)
                 {
@@ -18,18 +18,18 @@
          <div class="col-sm-4">
             <a class="btn btn-warning mb-2" data-toggle="modal" data-target="#listCustomerModal" style="font-size:0.8em;">KişiEkle</a>
             <a class="btn btn-danger mb-2" id="ilgiliListeyiBosalt" style="font-size:0.8em;">Listeyi Boşalt</a>
+            <form asp-controller="CustomerProduct" asp-action="DeleteAllDoubleProducts" method="post" style='display:inline;'>
+            <button class="btn btn-danger mb-2"  style="font-size:0.8em;">Çiftlemeyi Düzelt</button>
+            </form>
          </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-12" id="customersDiv">
-
+        <div class="accordion" id="accordionPanelsStayOpenExample">
         </div>
         <div class="col-sm-12" id="customersDiv">
-
             <button type="button" class="btn btn-success" id="calculate">Hesapla</button>
             <button type="button" class="btn btn-info" onclick="window.print()">Yazdir</button>
-
         </div>
     </div>
 </div>

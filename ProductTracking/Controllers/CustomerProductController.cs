@@ -58,5 +58,32 @@ namespace ProductTracking.Controllers
             var customerProducts = await _customerProductService.GetAllAsync();
             return Json(new { data = customerProducts});
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAllDoubleProducts()
+        {
+            var productlar = await _customerProductService.GetAllAsync();
+            List<CustomerProduct> distinctPeople = productlar
+              .GroupBy(p => new { p.CustomerId, p.ProductId})
+              .Select(g => g.First())
+              .ToList();
+
+            foreach (var silinecekData in productlar)
+            {
+                await _customerProductService.RemoveAsync(new CustomerProduct { Id = silinecekData.Id });
+            }
+
+            foreach (var eklenecekData in distinctPeople)
+            {
+                CustomerProduct yeni = new CustomerProduct();
+                yeni.CustomerId = eklenecekData.CustomerId;
+                yeni.ProductId = eklenecekData.ProductId;
+                yeni.ProductName= eklenecekData.ProductName;
+                yeni.Quantity = eklenecekData.Quantity;
+                await _customerProductService.AddAsync(yeni);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
