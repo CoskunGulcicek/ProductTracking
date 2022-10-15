@@ -10,7 +10,7 @@ using Tracking.DataAccess.Concrete.EntityFrameworkCore.Context;
 namespace Tracking.DataAccess.Migrations
 {
     [DbContext(typeof(TrackingContext))]
-    [Migration("20220721183234_init1")]
+    [Migration("20221015105807_init1")]
     partial class init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,6 +86,9 @@ namespace Tracking.DataAccess.Migrations
                         .HasAnnotation("SqlServer:IdentityIncrement", 1)
                         .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Default")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

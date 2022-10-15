@@ -11,7 +11,15 @@
             <select class="form-select form-control" onchange="javascript:getUsersBylistId()" aria-label="Default select example" name="ListId" id="indexSelectedListId">
                 @foreach (var l in ViewBag.lists)
                 {
-                    <option value="@l.Id">@l.Name</option>
+                    if (@l.Default == "y")
+                    {
+                        <option value="@l.Id" selected>@l.Name</option>
+                    }
+                    else
+                    {
+                    <option value="@l.Id">@l.Name</option>    
+                    }
+                    
                 }
             </select>
         </div>

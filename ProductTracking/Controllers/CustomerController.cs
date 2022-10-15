@@ -113,6 +113,22 @@ namespace ProductTracking.Controllers
         [HttpGet]
         public async Task<IActionResult> GetByListId(int Id)
         {
+            var listeler =  await _listService.GetAllAsync();
+            foreach (var item in listeler)
+            {
+                if(item.Id != Id)
+                {
+                    item.Default = "n";
+                }
+                else
+                {
+                    item.Default = "y";
+                }
+            }
+            foreach (var item in listeler)
+            {
+                await _listService.UpdateAsync(item);
+            }
             var customers = await _customerService.GetByLstCusIds(Id);
             return Json(customers);
         }

@@ -9,6 +9,6 @@ namespace Tracking.Entities.Dtos.List
     public class ListAddDto
     {
         public string Name { get; set; }
-
+        public string Default { get; set; }
     }
 }
