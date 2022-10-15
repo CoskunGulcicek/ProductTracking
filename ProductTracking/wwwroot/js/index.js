@@ -100,7 +100,7 @@ $('#calculate').click(function () {
                 document.getElementById('totalDiv').innerHTML = '';
                 for (var i = 0; i < data.length; i++) {
                     /* var alanlar = "<div class='col-sm-2  border-top border-bottom border-left'><strong>" + data[i].name + "</strong></div> <div class='col-sm-1 border-top border-bottom'><strong>" + data[i].type + "</strong></div> <div class='col-sm-1 border-top border-bottom border-right'><strong>" + data[i].quantity + "</strong></div>";*/
-                    var alanlar = "<div class='col-sm-2  border-top border-bottom border-left'><strong>" + data[i].name + "</strong></div> <div class='col-sm-1 border-top border-bottom border-right'><strong>" + data[i].quantity + "</strong></div>";
+                    var alanlar = "<div class='col-sm-2  border-top border-bottom border-left' style='font-size:1.1em;'><strong>" + data[i].name + "</strong></div> <div class='col-sm-1 border-top border-bottom border-right' style='font-size:1.1em;'><strong>" + data[i].quantity + "</strong></div>";
                     $("#totalDiv").append(alanlar);
                 }
             },
@@ -152,12 +152,12 @@ function getUsersBylistId() {
                     productLines += `<div class="products col-sm-3">
                                         <div class="row">
                                             <div class="col-sm-8">
-                                                          <input type="text" class="form-control" style="font-size:0.8em;" name="productname" placeholder="ProductName"  value="${data[i].products[j].productName}"  disabled>
+                                                          <input type="text" class="form-control" style="font-size:1em;" name="productname" placeholder="ProductName"  value="${data[i].products[j].productName}"  disabled>
                                                           <input type="hidden" name="userId" id="userId" value="${data[i].id}">
                                                           <input type="hidden" name="productId" id="productId" value="${data[i].products[j].productId}">
                                                     </div>
                                                     <div class="col-sm-4 form-inline">
-                                                          <input type="text" class="form-control"  style="width:55px;margin-left:-30px;font-size:0.8em;" name="quantityofproduct" value="${data[i].products[j].quantity}">
+                                                          <input type="text" class="form-control"  style="width:55px;margin-left:-30px;font-size:1em;" name="quantityofproduct" value="${data[i].products[j].quantity}">
                                                           <a class="btn btn-danger btn-sm" style="opacity:0.5;" onclick="javascript:urunSil(${data[i].products[j].id})">x</a>
                                                     </div>
                                             </div>
