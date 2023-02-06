@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "ToPrintCalculate";
+}
+
+
+@using ProductTracking.Models;
+@model List<CalculationModel>
+
+@{
+  var distinctPeople = @Model
+  .GroupBy(p => p.lineUserName)
+  .Select(g => g.First())
+  .ToList();
+}
+
+<div class="container">
+    <div class="row" id="totalDiv">
+        @foreach (var person in distinctPeople)
+		{
+		<div style="background-color: #E14434;"><strong>@person.lineUserName</strong></div>
+			@foreach (var line in Model)
+			{
+				if(line != null && line.lineUserName == person.lineUserName)
+				{
+					<div class="col-sm-2  border-top border-bottom border-left" style="font-size:1.1em;">
+						<strong>@line.Name</strong>
+					</div> 
+					<div class="col-sm-1 border-top border-bottom border-right" style="font-size:1.1em;">
+						<strong>@line.Quantity</strong>
+					</div>
+				}
+			}
+	}
+    </div>
+	<div style="background-color: #3774cf;"><strong>TOTALS</strong></div>
+	<div class="row" id="totalDiv">
+		@foreach (var a in Model)
+		{
+		<div class="col-sm-2  border-top border-bottom border-left" style="font-size:1.1em;">
+			<strong>@a.Name</strong>
+		</div> 
+		<div class="col-sm-1 border-top border-bottom border-right" style="font-size:1.1em;">
+			<strong>@a.Quantity</strong>
+		</div>
+		}
+	</div>
+
+	    <div class="row">
+        <div class="col-sm-12" id="customersDiv">
+            <button type="button" class="btn btn-info" onclick="window.print()">Yazdir</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/index.js"></script>

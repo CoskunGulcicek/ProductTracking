@@ -90,6 +90,7 @@ function customerAddBasket(customerproducts) {
     });
 }
 
+//Normal Altta Hesaplama İçin
 $('#calculate').click(function () {
     function sendCalculationData(data) {
         $.ajax({
@@ -120,12 +121,14 @@ $('#calculate').click(function () {
             var quantity = product.find('[name=quantityofproduct]').val();
             var cusId = product.find('[name=userId]').val();
             var prodId = product.find('[name=productId]').val();
+            var lineUserName = product.find('[name=lineUserName]').val();
             calculationData.push({
                 name: name,
                 type: type,
                 quantity: quantity,
                 cusId: cusId,
-                prodId: prodId
+                prodId: prodId,
+                lineUserName: lineUserName
             });
         }
     });
@@ -134,6 +137,53 @@ $('#calculate').click(function () {
         sendCalculationData(calculationData);
     }
 });
+
+//External Sayfaya Göndermesi İÇin
+$('#YazidrmaFormati').click(function () {
+    function sendCalculationData(data) {
+        $.ajax({
+            type: 'POST',
+            url: '/Home/ToPrintCalculate',
+            data: JSON.stringify(data),
+            success: function (data) {
+                var url = window.location.href;
+                url = '/home/ToPrintCalculates';
+                window.location.href = url;
+            },
+            contentType: "application/json",
+            error: function () {
+            }
+        });
+    }
+
+    var calculationData = [];
+    $('#accordionPanelsStayOpenExample .products').each(function () {
+        var product = $(this);
+        var quantityDoluMu = product.find('[name=quantityofproduct]').val();
+        if (quantityDoluMu != "") {
+            var name = product.find('[name=productname]').val();
+            var type = "kg"//product.find('select option:checked').val();
+            var quantity = product.find('[name=quantityofproduct]').val();
+            var cusId = product.find('[name=userId]').val();
+            var prodId = product.find('[name=productId]').val();
+            var lineUserName = product.find('[name=lineUserName]').val();
+            calculationData.push({
+                name: name,
+                type: type,
+                quantity: quantity,
+                cusId: cusId,
+                prodId: prodId,
+                lineUserName: lineUserName
+            });
+        }
+    });
+    //console.log(calculationData);
+    if (calculationData.length > 0) {
+        sendCalculationData(calculationData);
+    }
+});
+
+
 
 function getUsersBylistId() {
     totalDiv.innerHTML = "";
@@ -155,6 +205,7 @@ function getUsersBylistId() {
                                                           <input type="text" class="form-control" style="font-size:1em;" name="productname" placeholder="ProductName"  value="${data[i].products[j].productName}"  disabled>
                                                           <input type="hidden" name="userId" id="userId" value="${data[i].id}">
                                                           <input type="hidden" name="productId" id="productId" value="${data[i].products[j].productId}">
+                                                          <input type="hidden" name="lineUserName" id="lineUserName" value="${mergedName}">
                                                     </div>
                                                     <div class="col-sm-4 form-inline">
                                                           <input type="text" class="form-control"  style="width:55px;margin-left:-30px;font-size:1em;" name="quantityofproduct" value="${data[i].products[j].quantity}">
