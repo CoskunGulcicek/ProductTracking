@@ -4,39 +4,65 @@
 
 
 @using ProductTracking.Models;
-@model List<CalculationModel>
+@model List<CalculationModel>;
+@{
+	var icerik = new List<CalculationModel>();
+	icerik = Model;
+
+
+	
+}
 
 @{
-  var distinctPeople = @Model
-  .GroupBy(p => p.lineUserName)
+  var distinctPeople = icerik
+  .GroupBy(p => p.cusId)
   .Select(g => g.First())
   .ToList();
-}
+}                 
+
 
 <div class="container">
     <div class="row" id="totalDiv">
         @foreach (var person in distinctPeople)
 		{
-		<div style="background-color: #E14434;"><strong>@person.lineUserName</strong></div>
-			@foreach (var line in Model)
+			
+		<div style="background-color: #E14434;font-size: 1.4em;"><strong>@person.lineUserName</strong></div>
+			@foreach (var line in icerik)
 			{
-				if(line != null && line.lineUserName == person.lineUserName)
+				@if(person.cusId == line.cusId && line.Quantity>0)
 				{
-					<div class="col-sm-2  border-top border-bottom border-left" style="font-size:1.1em;">
+					<div class="col-sm-3" style="font-size:1.1em;border: none;border: 0;">
 						<strong>@line.Name</strong>
 					</div> 
-					<div class="col-sm-1 border-top border-bottom border-right" style="font-size:1.1em;">
+					<div class="col-sm-1" style="font-size:1.1em;border: none;border: 0;">
 						<strong>@line.Quantity</strong>
 					</div>
 				}
 			}
-	}
+	<br/><br />}
     </div>
-	<div style="background-color: #3774cf;"><strong>TOTALS</strong></div>
+		<br />
+	@{
+	var summaries = new List<CalculationModel>();
+	foreach (var mitem in icerik)
+            {
+               var varMı = summaries.Where(x => x.prodId == mitem.prodId).FirstOrDefault();
+                if (varMı == null)
+                {
+                    summaries.Add(mitem);
+                }
+                else
+                {
+                    decimal itemQ = mitem.Quantity.ToString() == null ? 0 : mitem.Quantity;
+                    summaries.Where(x => x.prodId == mitem.prodId).Select(x => x.Quantity = (x.Quantity + itemQ)).ToList();
+                }
+            }
+	}
+	<div style="background-color: #3774cf;font-size: 1.4em;"><strong>TOTALS</strong></div>
 	<div class="row" id="totalDiv">
-		@foreach (var a in Model)
+		@foreach (var a in summaries)
 		{
-		<div class="col-sm-2  border-top border-bottom border-left" style="font-size:1.1em;">
+		<div class="col-sm-3  border-top border-bottom border-left" style="font-size:1.1em;">
 			<strong>@a.Name</strong>
 		</div> 
 		<div class="col-sm-1 border-top border-bottom border-right" style="font-size:1.1em;">

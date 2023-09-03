@@ -125,7 +125,7 @@ namespace ProductTracking.Controllers
 
 
         
-        public IActionResult ToPrintCalculate([FromBody] List<CalculationModel> calculationModel)
+        public async Task<IActionResult> ToPrintCalculate([FromBody] List<CalculationModel> calculationModel)
         {
             using var Context = new TrackingContext();
             if (calculationModel.Count > 0)
@@ -135,7 +135,7 @@ namespace ProductTracking.Controllers
                     int deletedId = Context.CustomerProducts.Where(x => x.CustomerId == currentCal.cusId && x.ProductId == currentCal.prodId).Select(x => x.Id).FirstOrDefault();
                     if (deletedId != null && deletedId != 0)
                     {
-                         _customerProductService.RemoveAsync(new CustomerProduct() { Id = deletedId });
+                         await _customerProductService.RemoveAsync(new CustomerProduct() { Id = deletedId });
                     }
                 }
                 foreach (var currentCal in calculationModel)
@@ -144,49 +144,20 @@ namespace ProductTracking.Controllers
                     goToDb.CustomerId = currentCal.cusId;
                     goToDb.ProductId = currentCal.prodId;
                     goToDb.Quantity = currentCal.Quantity;
-                     _customerProductService.AddAsync(goToDb);
+                     await _customerProductService.AddAsync(goToDb);
                 }
             }
-
-
-            //burada ekrana basmak için göndereceği jsonu hazırlıyor
-            List<CalculationModel> newList = new List<CalculationModel>();
-            foreach (var item in calculationModel)
-            {
-                if (item.Name != null && item.Quantity.ToString() != null && item.Type != null)
-                {
-                    var varMı = newList.Where(x => x.Name == item.Name && x.Type == item.Type).FirstOrDefault();
-                    if (varMı == null)
-                    {
-                        newList.Add(item);
-                    }
-                    else
-                    {
-                        var tipeGoreVarMı = newList.Where(x => x.Name == item.Name && x.Type == item.Type).FirstOrDefault();
-                        if (tipeGoreVarMı == null)
-                        {
-                            newList.Add(item);
-                        }
-                        else
-                        {
-                            decimal itemQ = item.Quantity.ToString() == null ? 0 : item.Quantity;
-                            newList.Where(x => x.Name == item.Name && x.Type == item.Type).Select(x => x.Quantity = (x.Quantity + itemQ)).ToList();
-                        }
-                    }
-                }
-            }
-            var element = newList.Where(x => x.Quantity > 0).OrderBy(x => x.Name).ToList();
-            CalculateModelStatic.userChatNotifications.Clear();
-            foreach (var ii in element)
-            {
-                CalculateModelStatic.userChatNotifications.Add(ii);
-            }
+            
+            List<CalculationModel> newListTotal = new List<CalculationModel>();
+            newListTotal = calculationModel.Where(x => x.Quantity != 0).ToList();
+            CalculateModelStatic.StaticCalculation.Clear();
+            CalculateModelStatic.StaticCalculation.AddRange(newListTotal);
             return Ok();
         }
 
-        public IActionResult ToPrintCalculates()
+        public async Task<IActionResult> ToPrintCalculates()
         {
-            var abc = CalculateModelStatic.userChatNotifications;
+            var abc = CalculateModelStatic.StaticCalculation;
             return View(abc);
         }
 

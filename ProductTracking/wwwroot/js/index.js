@@ -216,16 +216,15 @@ function getUsersBylistId() {
                 }
                 target.innerHTML += `
                         <div class="accordion-item">
-                                  <a class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo_${i}" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo_${i}">
+                                  <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo_${i}" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo_${i}">
                                     ${mergedName}
                                   </a>
                                   <a class="btn btn-warning btn-sm btn_urun_ekle" data-toggle="modal" data-target="#myModal" onclick="javascript:sendCustomer(${data[i].id})" style="font-size:0.8em;">Ürün Ekle</a>
                                   <a class="btn btn-danger btn-sm btn_listeden_sil" onclick="javascript:deleteCustomerFromList(${data[i].id})" style="font-size:0.8em;">Listeden Sil</a>
                                 
-                                <div id="panelsStayOpen-collapseTwo_${i}" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo" style="">
+                                <div id="panelsStayOpen-collapseTwo_${i}" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo" style="">
                                   <div class="accordion-body">
-                                    
-                                            <div class="row">
+                                    <div class="row">
                                     ${productLines}
                                     </div>
                                 </div>

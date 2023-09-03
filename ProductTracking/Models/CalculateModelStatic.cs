@@ -7,6 +7,6 @@ namespace ProductTracking.Models
 {
     public static class CalculateModelStatic
     {
-        public static List<CalculationModel> userChatNotifications = new List<CalculationModel>();
+        public static List<CalculationModel> StaticCalculation = new List<CalculationModel>();
     }
 }
